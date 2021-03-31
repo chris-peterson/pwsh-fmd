@@ -45,20 +45,20 @@ function Format-Markdown{
         ForEach($key in $columns.Keys) {
             $header += ('{0,-' + $columns[$key] + '}') -f $key
         }
-        $header -join ' | '
+        Write-Output "$($header -join ' | ')`n"
 
         $separator = @()
         ForEach($key in $columns.Keys) {
             $separator += '-' * $columns[$key]
         }
-        $separator -join ' | '
+        Write-Output "$($separator -join ' | ')`n"
 
         ForEach($item in $items) {
             $values = @()
             ForEach($key in $columns.Keys) {
                 $values += ('{0,-' + $columns[$key] + '}') -f $item.($key)
             }
-            $values -join ' | '
+            Write-Output "$($values -join ' | ')`n"
         }
     }
 }
