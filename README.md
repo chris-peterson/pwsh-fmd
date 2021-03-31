@@ -1,67 +1,20 @@
-# FormatMarkdownTable PowerShell Module
+# Overview
 
-FormatMarkdownTable is a PowerShell module which contains Format-MarkdownTableListStyle cmdlet and Format-MarkdownTableTableStyle cmdlet.
+There were quite a few solutions out there for converting PSObject to markdown table.
 
-## Installing the FormatMarkdownTable PowerShell Module
+None of them did quite what I was looking for, so I borrowed the best parts from each.
 
-The module is published on the PowerShell Gallery.
+Most of the credit goes to:
 
-```powershell
-Install-Module FormatMarkdownTable
-```
+* https://github.com/microsoft/FormatPowerShellToMarkdownTable
+* https://www.powershellgallery.com/packages/PSMarkdown/1.1/Content/ConvertTo-Markdown.ps1
 
 ## Example
-
-```powershell
-Get-ChildItem c:\ | Format-MarkdownTableListStyle Name, LastWriteTime, Mode
+`gci | fmd Name,FullName`
+```text
+Name      | FullName
+--------- | -------------------------------------------------------------
+src       | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/src
+LICENSE   | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/LICENSE
+README.md | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md
 ```
-
-This example returns a summary of the child items in C drive, and markdown text will be copied to the clipboard. Each property is displayed on a separate row.
-
-```powershell
-Get-ChildItem c:\ | Format-MarkdownTableTableStyle Name, LastWriteTime, Mode
-```
-
-This example returns a summary of the child items in C drive, and markdown text will be copied to the clipboard. Each property is displayed on a separate col.
-
-## Alias
-
-You can also refer to Format-MarkdownTableListStyle by its built-in alias, FML.
-
-You can also refer to Format-MarkdownTableTableStyle by its built-in alias, FMT.
-
-If FML and FMT are not recognized, try `Import-Module FormatMarkdownTable` once to load the module explicitly.
-
-## Switch
-
-```powershell
-Get-ChildItem c:\ | fml Name, LastWriteTime, Mode -HideStandardOutput
-```
-
-HideStandardOutput indicates that the cmdlet hides the standard output.
-
-```powershell
-Get-ChildItem c:\ | fml Name, LastWriteTime, Mode -HideStandardOutput -ShowMarkdown
-```
-
-ShowMarkdown indicates that the cmdlet outputs the markdown text to the console.
-
-```powershell
-Get-ChildItem c:\ | fml Name, LastWriteTime, Mode -HideStandardOutput -ShowMarkdown -DoNotCopyToClipboard
-```
-
-DoNotCopyToClipboard indicates the the cmdlet does not copy the markdown text to the clipboard.
-
-## Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
