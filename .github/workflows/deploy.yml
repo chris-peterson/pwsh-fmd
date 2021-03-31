@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Publish Module to PowerShell Gallery
-        uses: pcgeek86/publish-powershell-module-action@v19
+        uses: chris-peterson/publish-powershell-module-action@patched
         id: publish-module
         with:
           modulePath: src/Format-Markdown
