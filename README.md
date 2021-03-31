@@ -9,8 +9,25 @@ Most of the credit goes to:
 * https://github.com/microsoft/FormatPowerShellToMarkdownTable
 * https://www.powershellgallery.com/packages/PSMarkdown/1.1/Content/ConvertTo-Markdown.ps1
 
-## Example
-`gci | fmd Name,FullName`
+## Usage
+
+`Install-Module Format-Markdown`
+### Short Example
+
+`gci | select Name,FullName | fmd`
+```text
+Name      | FullName
+--------- | -------------------------------------------------------------
+src       | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/src
+LICENSE   | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/LICENSE
+README.md | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md
+```
+
+### Fully Qualified Example
+
+### Short Example
+
+`Get-ChildItem | Select-Object Name,FullName | Format-Markdown`
 ```text
 Name      | FullName
 --------- | -------------------------------------------------------------

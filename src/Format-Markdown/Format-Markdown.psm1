@@ -1,35 +1,26 @@
 function Format-Markdown{
+
     [CmdletBinding()]
     [Alias("fmd")]
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [PSObject[]]
-        $InputObject,
-
-        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $false)]
-        [string[]]
-        $Property = @()
+        $InputObject
     )
+
     Begin {
-        $items = @()
-        $columns = @{}
+        $Items = @()
+        $Columns =[ordered]@{}
     }
 
     Process {
-        ForEach($item in $InputObject) {
-            #Write-Debug "Processing item '$item'"
-            $items += $item
+        foreach ($Item in $InputObject) {
+            $Items += $Item
 
-            $item.PSObject.Properties | %{
-                #Write-Debug "Processing property '$($_.Name)'"
-                if ($Property -and $Property.Length -gt 0 -and -not $Property.Contains($_.Name)) {
-                    #Write-Debug "suppressing $($_.Name)"
-                }
-                else {
-                    if ($_.Value -ne $null){
-                        if(-not $columns.ContainsKey($_.Name) -or $columns[$_.Name] -lt $_.Value.ToString().Length) {
-                            $columns[$_.Name] = $_.Value.ToString().Length
-                        }
+            $Item.PSObject.Properties | ForEach-Object {
+                if ($_.Value -ne $null){
+                    if(-not $Columns.Contains($_.Name) -or $Columns[$_.Name] -lt $_.Value.ToString().Length) {
+                        $Columns[$_.Name] = $_.Value.ToString().Length
                     }
                 }
             }
@@ -37,28 +28,28 @@ function Format-Markdown{
     }
 
     End {
-        ForEach($key in $($columns.Keys)) {
-            $columns[$key] = [Math]::Max($columns[$key], $key.Length)
+        foreach ($Key in $($Columns.Keys)) {
+            $Columns[$Key] = [Math]::Max($Columns[$Key], $Key.Length)
         }
 
-        $header = @()
-        ForEach($key in $columns.Keys) {
-            $header += ('{0,-' + $columns[$key] + '}') -f $key
+        $HeaderRow = @()
+        foreach ($Key in $Columns.Keys) {
+            $HeaderRow += ('{0,-' + $Columns[$Key] + '}') -f $Key
         }
-        Write-Output "$($header -join ' | ')`n"
+        Write-Output "$($HeaderRow -join ' | ')`n"
 
-        $separator = @()
-        ForEach($key in $columns.Keys) {
-            $separator += '-' * $columns[$key]
+        $SeparatorRow = @()
+        foreach ($Key in $Columns.Keys) {
+            $SeparatorRow += '-' * $Columns[$Key]
         }
-        Write-Output "$($separator -join ' | ')`n"
+        Write-Output "$($SeparatorRow -join ' | ')`n"
 
-        ForEach($item in $items) {
-            $values = @()
-            ForEach($key in $columns.Keys) {
-                $values += ('{0,-' + $columns[$key] + '}') -f $item.($key)
+        foreach ($Item in $Items) {
+            $DataRow = @()
+            foreach($key in $Columns.Keys) {
+                $DataRow += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
             }
-            Write-Output "$($values -join ' | ')`n"
+            Write-Output "$($DataRow -join ' | ')`n"
         }
     }
 }
