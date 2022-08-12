@@ -4,7 +4,7 @@
     # RootModule = ''
     
     # Version number of this module.
-    ModuleVersion = '1.0.0'
+    ModuleVersion = '1.0.1'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -19,13 +19,13 @@
     CompanyName = 'Chris Peterson'
     
     # Copyright statement for this module
-    Copyright = '(c) 2021'
+    Copyright = '(c) 2021 - 2022'
     
     # Description of the functionality provided by this module
     Description = 'Format PowerShell object to Markdown'
     
     # Minimum version of the Windows PowerShell engine required by this module
-    PowerShellVersion = '7.0'
+    PowerShellVersion = '5.0'
     
     # Name of the Windows PowerShell host required by this module
     # PowerShellHostName = ''

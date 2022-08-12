@@ -4,11 +4,9 @@ name: CI
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,17 +15,21 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    if: github.repository == 'chris-peterson/pwsh-fmd'
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
+      # https://github.com/marketplace/actions/publish-powershell-module
       - name: Publish Module to PowerShell Gallery
-        uses: chris-peterson/publish-powershell-module-action@patched
+        uses: pcgeek86/publish-powershell-module-action@v20
         id: publish-module
         with:
-          modulePath: src/Format-Markdown
           NuGetApiKey: ${{ secrets.PS_GALLERY_KEY }}
+    environment:
+      name: PowerShell Gallery
+      url: https://www.powershellgallery.com/packages/GitlabCli
