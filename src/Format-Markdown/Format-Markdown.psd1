@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.1.1'
+    ModuleVersion = '1.1.2'
     GUID = '4ccaec92-6067-444f-8987-0d6dbcc55d8b'
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'

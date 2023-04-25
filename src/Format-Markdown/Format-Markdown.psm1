@@ -40,13 +40,13 @@ function Format-Markdown{
                 items  = $Items | ForEach-Object {
                     $Row = @{}
                     foreach($key in $Columns.Keys) {
-                        $Row.$($key) += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
+                        $Row.$($key) = $_.($key)
                     }
                     $Row
                 }
                 filter = 'true'
             }
-            $Output += "$($Json | ConvertTo-Json -Compress)`n"
+            $Output += "$($Json | ConvertTo-Json -Depth 10 -Compress)`n"
             $Output += "```````n"
         } else {
             foreach ($Key in $($Columns.Keys)) {
