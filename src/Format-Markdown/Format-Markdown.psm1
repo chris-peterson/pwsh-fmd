@@ -37,7 +37,13 @@ function Format-Markdown{
             $Output += "``````json:table`n"
             $Json = @{
                 fields = $Columns.Keys | ForEach-Object { @{ key = $_; label = $_; sortable = 'true'}}
-                items  = $Items | ForEach-Object { $_.PSObject.Properties.GetEnumerator() | ForEach-Object { @{ $_.Name = $_.Value } } }
+                items  = $Items | ForEach-Object {
+                    $Row = @{}
+                    foreach($key in $Columns.Keys) {
+                        $Row.$($key) += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
+                    }
+                    $Row
+                }
                 filter = 'true'
             }
             $Output += "$($Json | ConvertTo-Json -Compress)`n"
