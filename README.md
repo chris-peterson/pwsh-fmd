@@ -23,15 +23,26 @@ LICENSE   | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/LICENSE
 README.md | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md
 ```
 
-### Fully Qualified Example
+### Longhand Examples
 
-### Short Example
+#### Markdown Table
 
-`Get-ChildItem | Select-Object Name,FullName | Format-Markdown`
+```powershell
+Get-ChildItem | Select-Object Name,FullName | Format-Markdown`
+```
 ```text
 Name      | FullName
 --------- | -------------------------------------------------------------
 src       | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/src
 LICENSE   | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/LICENSE
 README.md | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md
+```
+
+#### JSON Table
+
+```powershell
+Get-ChildItem | Select-Object Name,FullName | Format-Markdown -AsJsonTable
+```
+```json
+{"fields":[{"key":"Name","sortable":"true","label":"Name"},{"key":"FullName","sortable":"true","label":"FullName"}],"items":[{"Name":"README.md","FullName":"/Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md"},{"Name":"README.md","FullName":"/Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md"},{"Name":"README.md","FullName":"/Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md"}],"filter":"true"}
 ```
