@@ -28,7 +28,7 @@ README.md | /Users/cpeterson/src/github/chris-peterson/pwsh-fmd/README.md
 #### Markdown Table
 
 ```powershell
-Get-ChildItem | Select-Object Name,FullName | Format-Markdown`
+Get-ChildItem | Select-Object Name,FullName | Format-Markdown
 ```
 ```text
 Name      | FullName
