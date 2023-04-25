@@ -5,7 +5,11 @@ function Format-Markdown{
     param (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [PSObject[]]
-        $InputObject
+        $InputObject,
+
+        [switch]
+        [Parameter()]
+        $AsJsonTable
     )
 
     Begin {
@@ -28,28 +32,41 @@ function Format-Markdown{
     }
 
     End {
-        foreach ($Key in $($Columns.Keys)) {
-            $Columns[$Key] = [Math]::Max($Columns[$Key], $Key.Length)
-        }
-
-        $HeaderRow = @()
-        foreach ($Key in $Columns.Keys) {
-            $HeaderRow += ('{0,-' + $Columns[$Key] + '}') -f $Key
-        }
-        Write-Output "$($HeaderRow -join ' | ')`n"
-
-        $SeparatorRow = @()
-        foreach ($Key in $Columns.Keys) {
-            $SeparatorRow += '-' * $Columns[$Key]
-        }
-        Write-Output "$($SeparatorRow -join ' | ')`n"
-
-        foreach ($Item in $Items) {
-            $DataRow = @()
-            foreach($key in $Columns.Keys) {
-                $DataRow += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
+        $Output = ''
+        if ($AsJsonTable) {
+            $Output += "``````json:table`n"
+            $Json = @{
+                fields = $Columns.Keys | ForEach-Object { @{ key = $_; label = $_; sortable = 'true'}}
+                items  = $Items | ForEach-Object { $_.PSObject.Properties.GetEnumerator() | ForEach-Object { @{ $_.Name = $_.Value } } }
+                filter = 'true'
             }
-            Write-Output "$($DataRow -join ' | ')`n"
+            $Output += "$($Json | ConvertTo-Json -Compress)`n"
+            $Output += "```````n"
+        } else {
+            foreach ($Key in $($Columns.Keys)) {
+                $Columns[$Key] = [Math]::Max($Columns[$Key], $Key.Length)
+            }
+
+            $HeaderRow = @()
+            foreach ($Key in $Columns.Keys) {
+                $HeaderRow += ('{0,-' + $Columns[$Key] + '}') -f $Key
+            }
+            $Output += "$($HeaderRow -join ' | ')`n"
+
+            $SeparatorRow = @()
+            foreach ($Key in $Columns.Keys) {
+                $SeparatorRow += '-' * $Columns[$Key]
+            }
+            $Output += "$($SeparatorRow -join ' | ')`n"
+
+            foreach ($Item in $Items) {
+                $DataRow = @()
+                foreach($key in $Columns.Keys) {
+                    $DataRow += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
+                }
+                $Output += "$($DataRow -join ' | ')`n"
+            }
         }
+        Write-Output $Output
     }
 }
