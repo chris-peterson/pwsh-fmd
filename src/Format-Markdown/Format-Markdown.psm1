@@ -57,20 +57,20 @@ function Format-Markdown{
             foreach ($Key in $Columns.Keys) {
                 $HeaderRow += ('{0,-' + $Columns[$Key] + '}') -f $Key
             }
-            $Output += "$($HeaderRow -join ' | ')`n"
+            $Output += "|$($HeaderRow -join ' | ')|`n"
 
             $SeparatorRow = @()
             foreach ($Key in $Columns.Keys) {
                 $SeparatorRow += '-' * $Columns[$Key]
             }
-            $Output += "$($SeparatorRow -join ' | ')`n"
+            $Output += "|$($SeparatorRow -join ' | ')|`n"
 
             foreach ($Item in $Items) {
                 $DataRow = @()
                 foreach($key in $Columns.Keys) {
                     $DataRow += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
                 }
-                $Output += "$($DataRow -join ' | ')`n"
+                $Output += "|$($DataRow -join ' | ')|`n"
             }
         }
         Write-Output $Output
