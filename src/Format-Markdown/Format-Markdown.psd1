@@ -1,5 +1,5 @@
 @{
-    ModuleVersion = '1.1.2'
+    ModuleVersion = '1.2.0'
     GUID = '4ccaec92-6067-444f-8987-0d6dbcc55d8b'
     Author = 'Chris Peterson'
     CompanyName = 'Chris Peterson'
@@ -15,7 +15,7 @@
         PSData = @{
             LicenseUri   = 'https://github.com/chris-peterson/pwsh-fmd/blob/master/LICENSE'
             ProjectUri   = 'https://github.com/chris-peterson/pwsh-fmd'
-            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-fmd/pull/3'
+            ReleaseNotes = 'https://github.com/chris-peterson/pwsh-fmd/pull/5'
         }
     }
 }
