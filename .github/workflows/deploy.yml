@@ -27,6 +27,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          Import-Module Pester
+          $Result = Invoke-Pester -Path ./tests -PassThru
+          if ($Result.FailedCount -gt 0) {
+              throw "$($Result.FailedCount) test(s) failed"
+          }
+
       # https://github.com/marketplace/actions/publish-powershell-module
       - name: Publish Module to PowerShell Gallery
         uses: pcgeek86/publish-powershell-module-action@v20
