@@ -9,7 +9,24 @@ function Format-Markdown{
 
         [switch]
         [Parameter()]
-        $AsJsonTable
+        $AsJsonTable,
+
+        # GFM permits omitting the leading/trailing pipe on each table row, but
+        # recommends keeping it "for clarity of reading, and if there's
+        # otherwise parsing ambiguity" (https://github.github.com/gfm/#tables-extension-).
+        # Default to that recommended, canonical form; this switch opts back
+        # into the leaner style some renderers/tools produce.
+        [switch]
+        [Parameter()]
+        $NoOuterPipes,
+
+        # Spaces of padding on each side of every pipe - the inner column
+        # separators, and (when present) the outer wrapping pipes. Defaults
+        # to 1, matching the '| ' / ' |' convention used elsewhere.
+        [ValidateRange(0, [int]::MaxValue)]
+        [Parameter()]
+        [int]
+        $PadSpaces = 1
     )
 
     Begin {
@@ -49,6 +66,11 @@ function Format-Markdown{
             $Output += "$($Json | ConvertTo-Json -Depth 10 -Compress)`n"
             $Output += "```````n"
         } else {
+            $Pad = ' ' * $PadSpaces
+            $Separator = "$Pad|$Pad"
+            $Left = if ($NoOuterPipes) { '' } else { "|$Pad" }
+            $Right = if ($NoOuterPipes) { '' } else { "$Pad|" }
+
             foreach ($Key in $($Columns.Keys)) {
                 $Columns[$Key] = [Math]::Max($Columns[$Key], $Key.Length)
             }
@@ -57,20 +79,20 @@ function Format-Markdown{
             foreach ($Key in $Columns.Keys) {
                 $HeaderRow += ('{0,-' + $Columns[$Key] + '}') -f $Key
             }
-            $Output += "$($HeaderRow -join ' | ')`n"
+            $Output += "$Left$($HeaderRow -join $Separator)$Right`n"
 
             $SeparatorRow = @()
             foreach ($Key in $Columns.Keys) {
                 $SeparatorRow += '-' * $Columns[$Key]
             }
-            $Output += "$($SeparatorRow -join ' | ')`n"
+            $Output += "$Left$($SeparatorRow -join $Separator)$Right`n"
 
             foreach ($Item in $Items) {
                 $DataRow = @()
                 foreach($key in $Columns.Keys) {
                     $DataRow += ('{0,-' + $Columns[$key] + '}') -f $Item.($key)
                 }
-                $Output += "$($DataRow -join ' | ')`n"
+                $Output += "$Left$($DataRow -join $Separator)$Right`n"
             }
         }
         Write-Output $Output

@@ -1,0 +1,27 @@
+name: Test
+
+on:
+  # Pushes to main are covered by deploy.yml, which runs the same tests as a
+  # gate before publishing. This workflow covers everything deploy.yml
+  # doesn't: PRs, and pushes to other branches.
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+jobs:
+  pester:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          Install-Module Pester -Force -SkipPublisherCheck -Scope CurrentUser
+          Import-Module Pester
+          $Result = Invoke-Pester -Path ./tests -PassThru
+          if ($Result.FailedCount -gt 0) {
+              throw "$($Result.FailedCount) test(s) failed"
+          }
